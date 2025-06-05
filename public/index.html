@@ -37,8 +37,8 @@
       </div>
     </div>
 
-    <form>
-      <input type="text" id="taskInput" placeholder="Write your task" />
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="Write your task" autocomplete="off" />
       <button id="newTask" type="submit">+</button>
     </form>
 
@@ -60,7 +60,7 @@
     // Firebase Config
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDrzrhWbjfz_kqgurr2K1N2UO6wzy1kJ8I",
@@ -76,30 +76,61 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ✅ Redirect dacă utilizatorul NU e logat
+    // Redirect dacă utilizatorul NU e logat
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "login.html";
       }
     });
 
+    // Expun funcțiile Firestore global pentru app.js
     window.firestore = db;
     window.firebaseFns = { collection, addDoc, getDocs, onSnapshot, doc, deleteDoc, updateDoc };
+    window.auth = auth;
+    window.signOutUser = async () => {
+      try {
+        await signOut(auth);
+        alert("Te-ai deconectat!");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("Eroare la deconectare: " + error.message);
+      }
+    };
   </script>
 
   <!-- Settings Menu Script -->
   <script>
     const settingsBtn = document.getElementById('settingsBtn');
     const settingsMenu = document.getElementById('settingsMenu');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const themeSwitcher = document.getElementById('themeSwitcher');
 
     settingsBtn.addEventListener('click', () => {
       settingsMenu.classList.toggle('hidden');
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      alert('Te-ai deconectat!');
+    logoutBtn.addEventListener('click', () => {
+      window.signOutUser();
+    });
+
+    // Dark Mode toggle
+    // Verificăm dacă tema este salvată în localStorage
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+      themeSwitcher.checked = true;
+    }
+
+    themeSwitcher.addEventListener('change', () => {
+      if (themeSwitcher.checked) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', 'disabled');
+      }
     });
   </script>
 
 </body>
 </html>
+cl
