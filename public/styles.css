@@ -202,7 +202,18 @@ button {
   font-weight: 500;
   width: 100%;
   text-align: center;
+  transition: background-color 0.3s ease; /* adăugat pentru tranziție */
 }
+
+.logout-btn:hover {
+  background-color: #e04343; /* culoare mai închisă la hover */
+}
+body {
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease; /* adăugat */
+}
+
 
 
 

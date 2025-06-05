@@ -1,8 +1,8 @@
-// Import Firebase SDK (dacă folosești bundler/ES Modules, altfel folosește <script> în HTML)
+// Import Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// Firebase config din consola ta
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDrzrhWbjfz_kqgurr2K1N2UO6wzy1kJ8I",
   authDomain: "todo-app-8324e.firebaseapp.com",
@@ -17,10 +17,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let tasks = []; // array cu task-uri (locale pentru UI)
-let firestoreTasks = []; // array cu task-uri din Firestore, cu id pentru update/delete
+let tasks = [];
+let firestoreTasks = [];
 
-// Încarcă task-uri din Firestore
 async function loadTasks() {
   const querySnapshot = await getDocs(collection(db, "tasks"));
   tasks = [];
@@ -34,7 +33,6 @@ async function loadTasks() {
   updateStats();
 }
 
-// Salvează un task nou în Firestore
 async function saveTaskToFirestore(task) {
   const docRef = await addDoc(collection(db, "tasks"), task);
   firestoreTasks.push({ id: docRef.id, ...task });
@@ -43,7 +41,6 @@ async function saveTaskToFirestore(task) {
   updateStats();
 }
 
-// Șterge task din Firestore și local
 async function deleteTaskFirestore(index) {
   const id = firestoreTasks[index].id;
   await deleteDoc(doc(db, "tasks", id));
@@ -53,7 +50,6 @@ async function deleteTaskFirestore(index) {
   updateStats();
 }
 
-// Actualizează un task în Firestore și local
 async function toggleTaskCompleteFirestore(index) {
   const id = firestoreTasks[index].id;
   const newCompleted = !tasks[index].completed;
@@ -63,7 +59,6 @@ async function toggleTaskCompleteFirestore(index) {
   updateStats();
 }
 
-// Editare task local doar (poți adapta să salvezi în Firestore dacă vrei)
 function editTask(index) {
   const taskInput = document.getElementById("taskInput");
   taskInput.value = tasks[index].text;
@@ -71,10 +66,6 @@ function editTask(index) {
   // Șterge task-ul și Firestore-ul asociat
   deleteTaskFirestore(index);
 }
-
-const saveTasks = () => {
-  // Nu mai folosim localStorage, salvăm în Firestore direct
-};
 
 const addTask = () => {
   const taskInput = document.getElementById("taskInput");
@@ -193,15 +184,28 @@ const blaskConfetti = () => {
 const themeSwitcher = document.getElementById("themeSwitcher");
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadTasks(); // încărcăm task-uri din Firestore la start
+  loadTasks();
 
   const savedTheme = localStorage.getItem("theme") || "dark";
   document.documentElement.classList.toggle("light", savedTheme === "light");
   themeSwitcher.checked = savedTheme === "light";
 });
 
+// Schimbă tema la toggle
 themeSwitcher.addEventListener("change", () => {
   const isLight = themeSwitcher.checked;
   document.documentElement.classList.toggle("light", isLight);
   localStorage.setItem("theme", isLight ? "light" : "dark");
 });
+
+// --- Aici adăugăm funcția de logout ---
+
+const logoutBtn = document.querySelector(".logout-btn");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    // Poți adăuga aici și logout Firebase, dacă ai autentificare Firebase activă
+    // Deocamdată doar redirecționăm
+    window.location.href = "login.html";
+  });
+}

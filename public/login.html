@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
   <style>
+    /* Stilurile tale originale */
     * {
       margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -15,6 +16,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .login-container {
       position: relative;
@@ -28,7 +30,6 @@
       z-index: 0;
       overflow: hidden;
     }
-    /* Contur animat cu gradient care se misca */
     .login-container::before {
       content: "";
       position: absolute;
@@ -42,7 +43,6 @@
       animation: moveGradient 8s linear infinite;
       z-index: -1;
     }
-    /* Strat peste fundal pentru interiorul containerului */
     .login-container::after {
       content: "";
       position: absolute;
