@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forgot Password</title>
+  <style>
+    body {
+      background: #0a1a38;
+      color: #e0e1dd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      position: relative;
+      background: #162544;
+      padding: 40px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+      text-align: center;
+      z-index: 0;
+      overflow: hidden;
+    }
+    /* Contur animat cu gradient care se misca */
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 18px;
+      background: linear-gradient(270deg, #ff00cc, #3333ff, #00ffee, #ff00cc);
+      background-size: 600% 600%;
+      animation: moveGradient 8s linear infinite;
+      z-index: -1;
+    }
+    /* Strat peste fundal pentru interiorul containerului */
+    .container::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      background: #162544;
+      border-radius: 12px;
+      z-index: -1;
+    }
+    @keyframes moveGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #f1faee;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background-color: #2c3e5c;
+      color: white;
+    }
+    input::placeholder {
+      color: #cbd5e1;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #468faf;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #63b3d4;
+    }
+    a {
+      color: #a8dadc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Reset Password</h2>
+    <form id="forgotForm">
+      <input type="email" id="forgotEmail" placeholder="Enter your email" required />
+      <button type="submit">Send Reset Link</button>
+    </form>
+    <div style="margin-top: 15px;">
+      Back to <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDrzrhWbjfz_kqgurr2K1N2UO6wzy1kJ8I",
+      authDomain: "todo-app-8324e.firebaseapp.com",
+      projectId: "todo-app-8324e",
+      storageBucket: "todo-app-8324e.appspot.com",
+      messagingSenderId: "889582235093",
+      appId: "1:889582235093:web:03895c3541c7abbde0a15c",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const forgotForm = document.getElementById("forgotForm");
+
+    forgotForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("forgotEmail").value.trim();
+
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          alert("Password reset link sent to your email.");
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    });
+  </script>
+</body>
+</html>

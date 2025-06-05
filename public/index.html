@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo App</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- Settings Button and Menu -->
+  <div class="settings-container">
+    <button id="settingsBtn" class="settings-btn">⚙️</button>
+    <div id="settingsMenu" class="settings-menu hidden">
+      <div class="menu-item">
+        <label class="switch">
+          <input type="checkbox" id="themeSwitcher" />
+          <span class="slider round"></span>
+        </label>
+        <span>Dark Mode</span>
+      </div>
+      <button id="logoutBtn" class="menu-item logout-btn">Deconectare</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stats-container">
+      <div class="details">
+        <h1>Todo App</h1>
+        <p>Sarcinile mele:</p>
+        <div id="progressBar">
+          <div id="progress"></div>
+        </div>
+      </div>
+      <div class="stats-numbers">
+        <p id="numbers">0 / 0</p>
+      </div>
+    </div>
+
+    <form>
+      <input type="text" id="taskInput" placeholder="Write your task" />
+      <button id="newTask" type="submit">+</button>
+    </form>
+
+    <ul id="task-list"></ul>
+  </div>
+
+  <!-- App Script -->
+  <script src="./app.js" type="module"></script>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
+  <!-- Firebase Core -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+
+  <script type="module">
+    // Firebase Config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDrzrhWbjfz_kqgurr2K1N2UO6wzy1kJ8I",
+      authDomain: "todo-app-8324e.firebaseapp.com",
+      projectId: "todo-app-8324e",
+      storageBucket: "todo-app-8324e.appspot.com",
+      messagingSenderId: "889582235093",
+      appId: "1:889582235093:web:03895c3541c7abbde0a15c",
+      measurementId: "G-BXEV7E28BY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.firestore = db;
+    window.firebaseFns = { collection, addDoc, getDocs, onSnapshot, doc, deleteDoc, updateDoc };
+  </script>
+
+  <!-- Settings Menu Script -->
+  <script>
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsMenu = document.getElementById('settingsMenu');
+
+    settingsBtn.addEventListener('click', () => {
+      settingsMenu.classList.toggle('hidden');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      alert('Te-ai deconectat!');
+    });
+  </script>
+
+</body>
+</html>
